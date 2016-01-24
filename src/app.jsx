@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 // import Firebase from 'firebase';
 // instead of ReactFire Use Rebase to avoid mixins (depracated in ES6)
 import Rebase from 're-base';
+import List from './list.jsx';
 import Header from './header.jsx';
 
 const rootUrl = 'https://luminous-inferno-4335.firebaseio.com/';
@@ -19,17 +20,21 @@ export default class App extends React.Component {
 		// https://www.firebase.com/docs/web/libraries/react/api.html
 		// ...
 		this.state = {
-			list: []
+			list: [],
+			loaded: false
 		}
 
 		this.handleAddItem = this.handleAddItem.bind(this);
 	}
 
 	componentDidMount(){
-			this.ref = base.syncState(`todos`, {
+			this.ref = base.syncState('todos', {
 				context: this,
 				state: 'list',
-				asArray: true
+				asArray: true,
+				then(){
+					this.setState({loaded: true})
+				}
 			});
 		}
 
@@ -40,12 +45,16 @@ export default class App extends React.Component {
 	}
 
 	render() {
+		console.log(this.state.loaded);
 		return <div className="row panel panel-default">
 			<div className="col-md-8 col-md-offset2">
 				<h2 className="text-center">
 					To-Do-List
 				</h2>
 				<Header add={this.handleAddItem}/>
+				<div className={"content " + (this.state.loaded ? 'loaded' : '')}>
+					<List items={this.state.list}/>
+				</div>
 			</div>
 		</div>
 	}

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 
 export default class Header extends React.Component {
 
@@ -13,8 +13,8 @@ export default class Header extends React.Component {
 		}
 
 		// bind method
-		 this.handleClick = this.handleClick.bind(this);
-		 this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleClick = this.handleClick.bind(this);
+		this.handleInputChange = this.handleInputChange.bind(this);
 	}
 
 	render() {

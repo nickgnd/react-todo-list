@@ -1,3 +1,13 @@
 .black {
   color: black
 }
+
+.content {
+  opacity: 0;
+
+}
+
+.loaded {
+  transition: opacity 1s ease-in;
+  opacity: 1;
+}
