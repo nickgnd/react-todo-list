@@ -2,22 +2,38 @@ import './style.scss'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+// import ReactFire from 'reactfire';
+// import Firebase from 'firebase';
+// instead of ReactFire Use Rebase to avoid mixins (depracated in ES6)
+import Rebase from 're-base';
 
-// var Hello = React.createClass({
-//   render: function() {
-//     return <h1 className="red">
-//       Hello!
-//     </h1>
-//   }
-// });
+const rootUrl = 'https://luminous-inferno-4335.firebaseio.com/';
+var base = Rebase.createClass(rootUrl + 'items/'); // singleton fo db
 
-class Hello extends React.Component {
-  render() {
-  return <h1 className="red">
-          Hello!
-        </h1>
-  }
+export default class App extends React.Component {
+
+	constructor(props) {
+		super(props);
+		// Operations usually carried out in componentWillMount go here
+		// https://www.firebase.com/docs/web/libraries/react/api.html
+		// ...
+	}
+
+	componentDidMount(){
+			base.syncState(`todos`, {
+				context: this,
+				state: 'items',
+				asArray: true
+			});
+		}
+
+	render() {
+		console.log(this.state);
+		return <h1 className="red">
+				Hello React!
+			</h1>
+	}
 };
 
-var element = React.createElement(Hello, {});
+var element = React.createElement(App, {});
 ReactDOM.render(element, document.querySelector('.container'));
