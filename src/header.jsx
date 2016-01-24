@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export default class App extends React.Component {
+export default class Header extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -37,6 +37,17 @@ export default class App extends React.Component {
 
 	handleClick() {
 		// send value to firebase
+		var obj = {
+			text: this.state.text,
+			done: false
+		}
+
+		this.props.add(obj);
+
+		// reset
+		this.state = {
+			text: ''
+		}
 	}
 
 	handleInputChange(event) {

@@ -9,7 +9,7 @@ import Rebase from 're-base';
 import Header from './header.jsx';
 
 const rootUrl = 'https://luminous-inferno-4335.firebaseio.com/';
-var base = Rebase.createClass(rootUrl + 'items/'); // singleton fo db
+const base = Rebase.createClass(rootUrl + 'todo-list/'); // singleton fo db
 
 export default class App extends React.Component {
 
@@ -18,24 +18,34 @@ export default class App extends React.Component {
 		// Operations usually carried out in componentWillMount go here
 		// https://www.firebase.com/docs/web/libraries/react/api.html
 		// ...
+		this.state = {
+			list: []
+		}
+
+		this.handleAddItem = this.handleAddItem.bind(this);
 	}
 
 	componentDidMount(){
-			base.syncState(`todos`, {
+			this.ref = base.syncState(`todos`, {
 				context: this,
-				state: 'items',
+				state: 'list',
 				asArray: true
 			});
 		}
 
+	handleAddItem(newItem){
+		this.setState({
+		  list: this.state.list.concat([newItem])
+		});
+	}
+
 	render() {
-		console.log(this.state);
 		return <div className="row panel panel-default">
 			<div className="col-md-8 col-md-offset2">
 				<h2 className="text-center">
 					To-Do-List
 				</h2>
-				<Header />
+				<Header add={this.handleAddItem}/>
 			</div>
 		</div>
 	}
