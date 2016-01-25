@@ -10,7 +10,7 @@ import List from './list.jsx';
 import Header from './header.jsx';
 
 const rootUrl = 'https://luminous-inferno-4335.firebaseio.com/';
-const base = Rebase.createClass(rootUrl + 'todo-list/'); // singleton fo db
+const base = Rebase.createClass(rootUrl + 'todo-list/');
 
 export default class App extends React.Component {
 
