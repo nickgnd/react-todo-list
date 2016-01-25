@@ -11,11 +11,15 @@ export default class ListItem extends React.Component {
 
 		this.state = {
 			text: this.props.item.text,
-			done: this.props.item.done
+			done: this.props.item.done,
+			textChanged: false
 		}
 
 		this.handleDoneChange=this.handleDoneChange.bind(this);
 		this.handleDeleteClick=this.handleDeleteClick.bind(this);
+		this.handleTextChange=this.handleTextChange.bind(this);
+		this.handleUndoClick=this.handleUndoClick.bind(this);
+		this.handleSaveClick=this.handleSaveClick.bind(this);
 	}
 
 	// componentDidMount(){
@@ -45,6 +49,58 @@ export default class ListItem extends React.Component {
 		});
 	}
 
+	handleTextChange(event) {
+		var update = {
+			text: event.target.value,
+			textChanged: true
+		}
+		// set locally
+		this.setState(update);
+
+	}
+
+	// helper function
+	changesButton() {
+		if(!this.state.textChanged) {
+			return null;
+		} else {
+			return [
+				<button
+					onClick={this.handleSaveClick}
+					className="btn btn-default"
+					>
+					Save
+				</button>,
+				<button
+					onClick={this.handleUndoClick}
+					className="btn btn-default"
+					>
+					Undo
+				</button>
+			]
+		}
+	}
+
+	handleSaveClick() {
+		var update = {
+			done: this.state.done,
+			text: this.state.text
+		}
+		// update state
+		this.setState({textChanged: false});
+		// send to DB
+		base.post(`todos/${this.props.item.key}`, {
+			data: update
+		});
+	}
+
+	handleUndoClick() {
+		this.setState({
+			text: this.props.item.text,
+			textChanged: false
+		});
+	}
+
 	render() {
 		return <div className="input-group">
 			<span className="input-group-addon">
@@ -55,9 +111,13 @@ export default class ListItem extends React.Component {
 					/>
 			</span>
 			<input type="text"
+				disabled={this.state.done}
 				className="form-control"
-				value={this.state.text} />
+				value={this.state.text}
+				onChange={this.handleTextChange}
+				/>
 			<span className="input-group-btn">
+			{ this.changesButton() }
 				<button
 					className="btn btn-default"
 					onClick={this.handleDeleteClick}
