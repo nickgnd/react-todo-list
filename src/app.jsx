@@ -51,6 +51,7 @@ export default class App extends React.Component {
 				<h2 className="text-center">
 					To-Do-List
 				</h2>
+				<hr />
 				<Header add={this.handleAddItem}/>
 				<div className={"content " + (this.state.loaded ? 'loaded' : '')}>
 					<List items={this.state.list}/>

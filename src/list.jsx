@@ -1,4 +1,5 @@
 import React from 'react';
+import ListItem from './list-item.jsx';
 
 export default class List extends React.Component {
 	constructor(props) {
@@ -9,9 +10,9 @@ export default class List extends React.Component {
 
 	render() {
 
-		return <ul>
+		return <div>
 			{this.renderList()}
-			</ul>
+			</div>
 	}
 
 	renderList() {
@@ -22,14 +23,19 @@ export default class List extends React.Component {
 		} else {
 			var itemList = [];
 
-			this.props.items.map( (item) => {
+			for (var key in this.props.items) {
+				var item = this.props.items[key];
+				item.key = key; // to keep key props
 				itemList.push(
-					<li>
-						{item.text}
-					</li>
+					<ListItem
+						item={item}
+						key={key}
+					>
+					</ListItem>
 				)
-			});
+			}
 			return itemList;
 		}
 	}
 }
+
