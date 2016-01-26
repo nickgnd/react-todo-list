@@ -25,7 +25,7 @@ export default class List extends React.Component {
 
 			for (var key in this.props.items) {
 				var item = this.props.items[key];
-				item.key = key; // to keep key props
+				// item.key = key; // to keep key props
 				itemList.push(
 					<ListItem
 						item={item}

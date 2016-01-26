@@ -9,6 +9,8 @@ import Rebase from 're-base';
 import List from './list.jsx';
 import Header from './header.jsx';
 
+import _ from 'underscore';
+
 const rootUrl = 'https://luminous-inferno-4335.firebaseio.com/';
 const base = Rebase.createClass(rootUrl + 'todo-list/');
 
@@ -25,6 +27,8 @@ export default class App extends React.Component {
 		}
 
 		this.handleAddItem = this.handleAddItem.bind(this);
+		this.deleteButton = this.deleteButton.bind(this);
+		this.onDeleteClick = this.onDeleteClick.bind(this);
 	}
 
 	componentDidMount(){
@@ -44,6 +48,35 @@ export default class App extends React.Component {
 		});
 	}
 
+	deleteButton() {
+		if(!this.state.loaded) {
+			return null;
+		} else {
+			return <div className="text-center clear-complete">
+				<hr />
+				<button
+					type="button"
+					onClick={this.onDeleteClick}
+					className="btn btn-default" >
+					Clear Complete
+				</button>
+			</div>
+		}
+	}
+
+	// DOESN'T WORK WELL
+	// delete update key value of array and lost sync with Firebase
+	// key value is added automatically by `asArray: true` in .syncState method
+	// https://github.com/tylermcginnis/re-base/issues/72
+	onDeleteClick() {
+		var newList = _.reject(this.state.list, function(item) {
+			return item.done === true;
+		});
+		this.setState({
+			list: newList
+		});
+	}
+
 	render() {
 		console.log(this.state.loaded);
 		return <div className="row panel panel-default">
@@ -52,9 +85,10 @@ export default class App extends React.Component {
 					To-Do-List
 				</h2>
 				<hr />
-				<Header add={this.handleAddItem}/>
+				<Header add={this.handleAddItem} list={this.state.list}/>
 				<div className={"content " + (this.state.loaded ? 'loaded' : '')}>
 					<List items={this.state.list}/>
+					{this.deleteButton()}
 				</div>
 			</div>
 		</div>
